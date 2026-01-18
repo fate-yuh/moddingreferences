@@ -117,6 +117,81 @@ const DATA = {
   },
 
   "C#": {
+       "BepInEx / Modding": {
+    "BepInPlugin": {
+      tip: "Define a BepInEx plugin",
+      desc: "Marks your class as a BepInEx plugin with ID, name, and version.",
+      code: `[BepInPlugin("com.yourname.plugin", "My Plugin", "1.0.0")]
+public class MyPlugin : BaseUnityPlugin { }`
+    },
+    "OnEnable": {
+      tip: "Plugin initialization",
+      desc: "Called when your plugin is loaded by BepInEx.",
+      code: `public void OnEnable() {
+    Logger.LogInfo("Plugin loaded!");
+}`
+    },
+    "OnDisable": {
+      tip: "Plugin cleanup",
+      desc: "Called when plugin is disabled/unloaded.",
+      code: `public void OnDisable() {
+    Logger.LogInfo("Plugin unloaded!");
+}`
+    },
+    "Logger.LogInfo": {
+      tip: "Log information",
+      desc: "Outputs info to the BepInEx console.",
+      code: `Logger.LogInfo("Hello from your mod!");`
+    },
+    "Harmony Patch": {
+      tip: "Patch methods",
+      desc: "Use Harmony to modify existing game methods at runtime.",
+      code: `var harmony = new Harmony("com.yourname.plugin");
+harmony.PatchAll();`
+    }
+  },
+
+  "Unity / C# Basics": {
+    "DontDestroyOnLoad": {
+      tip: "Persist GameObject across scenes",
+      desc: "Prevents a GameObject from being destroyed when loading a new scene.",
+      code: `DontDestroyOnLoad(gameObject);`
+    },
+    "Awake": {
+      tip: "Called when object is created",
+      desc: "Use for early initialization before Start.",
+      code: `void Awake() { /* setup before Start */ }`
+    },
+    "Start": {
+      tip: "Called before first frame",
+      desc: "Initialization logic for your MonoBehaviour.",
+      code: `void Start() { /* init code here */ }`
+    },
+    "OnDestroy": {
+      tip: "Cleanup logic",
+      desc: "Called when the object is destroyed.",
+      code: `void OnDestroy() { /* cleanup code */ }`
+    },
+    "Instantiate": {
+      tip: "Clone object",
+      desc: "Spawn prefab or object at runtime.",
+      code: `Instantiate(prefab, position, rotation);`
+    },
+    "Destroy": {
+      tip: "Destroy object",
+      desc: "Removes GameObject or component from the scene.",
+      code: `Destroy(gameObject);`
+    },
+    "Vector3": {
+      tip: "3D position or direction",
+      desc: "Represents a 3D vector with x, y, z coordinates.",
+      code: `Vector3 pos = new Vector3(1f, 2f, 3f);`
+    },
+    "Quaternion": {
+      tip: "Rotation representation",
+      desc: "Used for rotations in 3D space.",
+      code: `Quaternion rot = Quaternion.Euler(0f, 90f, 0f);`
+    },
     "Unity Lifecycle": {
       "Update": {
         tip: "Every frame",
@@ -270,6 +345,7 @@ window.addEventListener("resize", resize);
 resize();
 snow();
 renderCategories();
+
 
 
 
