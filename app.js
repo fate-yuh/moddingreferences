@@ -6,6 +6,43 @@ const tooltip = document.getElementById("tooltip");
 
 const DATA = {
   "C++": {
+      "Basics": {
+      "bool": {
+        tip: "Boolean type",
+        desc: "Represents true or false values in IL2CPP.",
+        code: "bool flag = true;"
+      },
+      "int": {
+        tip: "Integer type",
+        desc: "32-bit signed integer for numeric values.",
+        code: "int number = 42;"
+      },
+      "float": {
+        tip: "Floating-point type",
+        desc: "32-bit floating-point number.",
+        code: "float speed = 3.14f;"
+      },
+      "double": {
+        tip: "Double precision type",
+        desc: "64-bit floating-point number.",
+        code: "double pi = 3.14159;"
+      },
+      "Vector3": {
+        tip: "3D vector",
+        desc: "Represents positions or directions in 3D space.",
+        code: "Vector3 pos = {1.0f, 2.0f, 3.0f};"
+      },
+      "String": {
+        tip: "Managed string",
+        desc: "IL2CPP string object (System.String).",
+        code: "Il2CppString* str = il2cpp_string_new(\"Hello\");"
+      },
+      "Object": {
+        tip: "Managed object",
+        desc: "Base type for all IL2CPP objects.",
+        code: "Il2CppObject* obj = /* some object */;"
+      }
+    },
     "Domains & Threads": {
       "il2cpp_domain_get": {
         tip: "Get active IL2CPP domain",
@@ -233,5 +270,6 @@ window.addEventListener("resize", resize);
 resize();
 snow();
 renderCategories();
+
 
 
