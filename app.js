@@ -4,21 +4,20 @@
 
 const DATA = {
   "C++": {
-    "Domain & Threads": {
+    "Domains & Threads": {
       "il2cpp_domain_get": {
-        tip: "Gets the active IL2CPP domain",
-        desc: "Entry point for all metadata access.",
+        tip: "Get active IL2CPP domain",
+        desc: "Entry point for metadata access.",
         code: `Il2CppDomain* domain = il2cpp_domain_get();`
       },
       "il2cpp_domain_get_assemblies": {
-        tip: "Enumerates loaded assemblies",
-        desc: "Used to locate Assembly-CSharp.",
-        code: `auto assemblies =
-    il2cpp_domain_get_assemblies(domain, &size);`
+        tip: "Enumerate assemblies",
+        desc: "Find Assembly-CSharp.",
+        code: `il2cpp_domain_get_assemblies(domain, &size);`
       },
       "il2cpp_thread_attach": {
-        tip: "Attach native thread to IL2CPP",
-        desc: "Required before calling IL2CPP APIs.",
+        tip: "Attach native thread",
+        desc: "Required before IL2CPP calls.",
         code: `il2cpp_thread_attach(domain);`
       }
     },
@@ -26,27 +25,13 @@ const DATA = {
     "Assembly & Image": {
       "il2cpp_assembly_get_image": {
         tip: "Assembly → Image",
-        desc: "Required before resolving classes.",
-        code: `Il2CppImage* image =
-    il2cpp_assembly_get_image(assembly);`
+        desc: "Used before resolving classes.",
+        code: `il2cpp_assembly_get_image(assembly);`
       },
       "BNM::Image": {
         tip: "BNM image wrapper",
-        desc: "Resolves IL2CPP image by name.",
+        desc: "Resolve image by name.",
         code: `BNM::Image image("Assembly-CSharp");`
-      }
-    },
-
-    "Class Metadata": {
-      "il2cpp_class_from_name": {
-        tip: "Resolve class by name",
-        desc: "Primary class resolver.",
-        code: `il2cpp_class_from_name(img,"NS","Class");`
-      },
-      "il2cpp_class_get_methods": {
-        tip: "Enumerate class methods",
-        desc: "Used for invoke or hooking.",
-        code: `il2cpp_class_get_methods(klass, &iter);`
       }
     }
   },
@@ -55,25 +40,25 @@ const DATA = {
     "Unity Lifecycle": {
       "Update": {
         tip: "Runs every frame",
-        desc: "Used for input and logic.",
-        code: `void Update() { }`
+        desc: "Used for logic and input.",
+        code: `void Update() {}`
       },
       "FixedUpdate": {
         tip: "Physics tick",
         desc: "Used for Rigidbody logic.",
-        code: `void FixedUpdate() { }`
+        code: `void FixedUpdate() {}`
       }
     },
 
     "Input & Time": {
       "Input.GetKey": {
-        tip: "Checks if a key is held",
-        desc: "Used for continuous input.",
+        tip: "Key held",
+        desc: "Checks if key is pressed.",
         code: `Input.GetKey(KeyCode.Space);`
       },
       "Time.deltaTime": {
-        tip: "Frame delta time",
-        desc: "Used for smooth movement.",
+        tip: "Frame delta",
+        desc: "Smooth movement.",
         code: `speed * Time.deltaTime;`
       }
     }
@@ -81,12 +66,12 @@ const DATA = {
 };
 
 /* =========================
-   UI + SEARCH LOGIC
+   UI LOGIC
    ========================= */
 
 let currentLang = "C++";
 
-const categoryContainer = document.getElementById("categories");
+const categoriesEl = document.getElementById("categories");
 const titleEl = document.getElementById("title");
 const descEl = document.getElementById("desc");
 const codeEl = document.getElementById("code");
@@ -106,51 +91,64 @@ function clearContent() {
 
 function renderCategories() {
   const query = searchEl.value.toLowerCase();
-  categoryContainer.innerHTML = "";
+  categoriesEl.innerHTML = "";
 
-  const categories = DATA[currentLang];
+  for (const category in DATA[currentLang]) {
+    const methods = DATA[currentLang][category];
+    const container = document.createElement("div");
 
-  for (const cat in categories) {
-    let visibleCount = 0;
-    const section = document.createElement("div");
+    const catBtn = document.createElement("button");
+    catBtn.className = "category-btn";
+    catBtn.textContent = category;
 
-    const header = document.createElement("h3");
-    header.textContent = cat;
-    section.appendChild(header);
+    const methodList = document.createElement("div");
+    methodList.className = "method-list";
+    methodList.style.display = "none";
 
-    for (const method in categories[cat]) {
-      const item = categories[cat][method];
-      const searchText =
-        `${method} ${item.tip} ${item.desc}`.toLowerCase();
+    let matchCount = 0;
+
+    for (const method in methods) {
+      const item = methods[method];
+      const searchText = `${method} ${item.tip} ${item.desc}`.toLowerCase();
 
       if (query && !searchText.includes(query)) continue;
 
-      visibleCount++;
+      matchCount++;
 
       const btn = document.createElement("button");
       btn.className = "method";
       btn.textContent = method;
       btn.dataset.tip = item.tip;
-      btn.onclick = () => showMethod(cat, method);
+      btn.onclick = () => showMethod(category, method);
 
-      section.appendChild(btn);
+      methodList.appendChild(btn);
     }
 
-    if (visibleCount > 0) {
-      categoryContainer.appendChild(section);
-    }
+    if (matchCount === 0) continue;
+
+    // Auto-open when searching
+    methodList.style.display = query ? "block" : "none";
+
+    catBtn.onclick = () => {
+      methodList.style.display =
+        methodList.style.display === "none" ? "block" : "none";
+    };
+
+    container.appendChild(catBtn);
+    container.appendChild(methodList);
+    categoriesEl.appendChild(container);
   }
 }
 
-function showMethod(cat, method) {
-  const item = DATA[currentLang][cat][method];
+function showMethod(category, method) {
+  const item = DATA[currentLang][category][method];
   titleEl.textContent = method;
   descEl.textContent = item.desc;
   codeEl.textContent = item.code;
 }
 
 /* =========================
-   SNOW ANIMATION
+   SNOW
    ========================= */
 
 const canvas = document.getElementById("snow");
@@ -160,7 +158,7 @@ let w, h, flakes;
 function resize() {
   w = canvas.width = window.innerWidth;
   h = canvas.height = window.innerHeight;
-  flakes = Array.from({ length: 140 }, () => ({
+  flakes = Array.from({ length: 120 }, () => ({
     x: Math.random() * w,
     y: Math.random() * h,
     r: Math.random() * 2 + 0.5,
@@ -190,4 +188,3 @@ window.addEventListener("resize", resize);
 resize();
 drawSnow();
 renderCategories();
-clearContent();
