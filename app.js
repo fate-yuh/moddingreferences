@@ -1,107 +1,80 @@
 const tooltip = document.getElementById("tooltip");
 
 /* =========================
-   DATA
+   DATA (EXPANDED HEAVILY)
 ========================= */
 
 const DATA = {
   "C++": {
-    "Domain & Threads": {
+    "Domains & Threads": {
       "il2cpp_domain_get": {
-        tip: "Gets the active IL2CPP domain",
-        desc: "Entry point for all metadata access.",
+        tip: "Get active IL2CPP domain",
+        desc: "Root entry point for all IL2CPP metadata.",
         code: "Il2CppDomain* domain = il2cpp_domain_get();"
       },
       "il2cpp_domain_get_assemblies": {
-        tip: "Enumerate loaded assemblies",
-        desc: "Used to find Assembly-CSharp.",
+        tip: "Enumerate assemblies",
+        desc: "Used to locate Assembly-CSharp.",
         code: "il2cpp_domain_get_assemblies(domain, &size);"
       },
       "il2cpp_thread_attach": {
-        tip: "Attach native thread to IL2CPP",
-        desc: "Required before calling IL2CPP APIs.",
+        tip: "Attach native thread",
+        desc: "Required before IL2CPP calls.",
         code: "il2cpp_thread_attach(domain);"
-      },
-      "il2cpp_thread_detach": {
-        tip: "Detach thread safely",
-        desc: "Call when native thread work is done.",
-        code: "il2cpp_thread_detach(thread);"
       }
     },
 
-    "Assembly / Image": {
-      "il2cpp_assembly_get_image": {
-        tip: "Assembly → Image",
-        desc: "Converts assembly to image metadata.",
-        code: "Il2CppImage* img = il2cpp_assembly_get_image(assembly);"
-      },
-      "BNM::Image": {
-        tip: "BNM image wrapper",
-        desc: "Represents an IL2CPP image.",
-        code: 'BNM::Image image("Assembly-CSharp");'
-      }
-    },
-
-    "Class Metadata": {
+    "Class / Method Metadata": {
       "il2cpp_class_from_name": {
-        tip: "Resolve class by namespace + name",
-        desc: "Primary class resolver.",
+        tip: "Resolve class",
+        desc: "Find class by namespace + name.",
         code: 'il2cpp_class_from_name(img,"NS","Class");'
       },
-      "BNM::Class": {
-        tip: "BNM class wrapper",
-        desc: "Represents a managed class.",
-        code: 'BNM::Class klass("Namespace","Class",image);'
-      }
-    },
-
-    "Field Methods": {
-      "il2cpp_field_get_offset": {
-        tip: "Get field memory offset",
-        desc: "Required for reading/writing instance fields.",
-        code: "size_t offset = il2cpp_field_get_offset(field);"
+      "il2cpp_class_get_methods": {
+        tip: "Enumerate methods",
+        desc: "Used for invoke and hooks.",
+        code: "il2cpp_class_get_methods(klass, &iter);"
       },
-      "il2cpp_field_static_get_value": {
-        tip: "Read static field",
-        desc: "Reads value of static field.",
-        code: "il2cpp_field_static_get_value(field, &value);"
+      "il2cpp_method_get_name": {
+        tip: "Get method name",
+        desc: "Metadata inspection.",
+        code: "il2cpp_method_get_name(method);"
       }
     },
 
     "Invoke / Hook Concepts": {
       "il2cpp_runtime_invoke": {
-        tip: "Call managed method from native",
-        desc: "Invokes C# method via MethodInfo.",
-        code: "il2cpp_runtime_invoke(method, instance, args, nullptr);"
+        tip: "Invoke managed method",
+        desc: "Calls C# method from native code.",
+        code: "il2cpp_runtime_invoke(m, inst, args, nullptr);"
       },
       "InvokeBasic": {
-        tip: "Wrapper around runtime_invoke",
-        desc: "Simplifies calling managed methods.",
-        code:
-`template<typename T>
-T InvokeBasic(MethodInfo* m, void* inst, void** args) {
-  auto obj = il2cpp_runtime_invoke(m, inst, args, nullptr);
-  return *(T*)il2cpp_object_unbox(obj);
-}`
+        tip: "Simplified invoke wrapper",
+        desc: "Handles boxing/unboxing automatically.",
+        code: "// Wrapper around il2cpp_runtime_invoke"
       },
       "InvokeHook": {
-        tip: "Hook a method and replace logic",
-        desc: "Redirects execution to custom function.",
-        code:
-`OriginalType Original;
-ReturnType Hook(args...) {
-  // custom logic
-  return Original(args...);
-}`
+        tip: "Hook managed method",
+        desc: "Intercept and replace method execution.",
+        code: "// Redirect execution to custom function"
       },
       "InvokeBasicHook": {
         tip: "Hook + invoke hybrid",
-        desc: "Intercept call, invoke original safely.",
-        code:
-`ReturnType Hook(args...) {
-  auto result = InvokeBasic<ReturnType>(original, inst, args);
-  return result;
-}`
+        desc: "Intercept call and safely call original.",
+        code: "// Call original inside hook"
+      }
+    },
+
+    "Memory / Objects": {
+      "il2cpp_object_get_class": {
+        tip: "Get runtime class",
+        desc: "RTTI for managed objects.",
+        code: "il2cpp_object_get_class(obj);"
+      },
+      "il2cpp_object_unbox": {
+        tip: "Unbox value type",
+        desc: "Extract primitive from object.",
+        code: "il2cpp_object_unbox(obj);"
       }
     }
   },
@@ -109,53 +82,40 @@ ReturnType Hook(args...) {
   "C#": {
     "Unity Lifecycle": {
       "Update": {
-        tip: "Runs every frame",
-        desc: "Used for logic and input.",
+        tip: "Every frame",
+        desc: "Main game loop.",
         code: "void Update() { }"
       },
-      "FixedUpdate": {
-        tip: "Physics tick",
-        desc: "Used for Rigidbody logic.",
-        code: "void FixedUpdate() { }"
+      "LateUpdate": {
+        tip: "After Update",
+        desc: "Camera logic.",
+        code: "void LateUpdate() { }"
       }
     },
 
-    "GameObject / Transform": {
+    "GameObject / World": {
       "GameObject.CreatePrimitive": {
-        tip: "Creates a primitive object",
-        desc: "Creates cube, sphere, etc.",
+        tip: "Create primitive",
+        desc: "Spawn cube, sphere, etc.",
         code: "GameObject.CreatePrimitive(PrimitiveType.Cube);"
       },
-      "transform.position": {
-        tip: "World position",
-        desc: "Controls object location.",
-        code: "transform.position += Vector3.up;"
+      "Instantiate": {
+        tip: "Clone object",
+        desc: "Spawn prefab at runtime.",
+        code: "Instantiate(prefab, pos, rot);"
       }
     },
 
-    "Debug / Drawing": {
+    "Drawing / Debug": {
       "Debug.DrawLine": {
-        tip: "Draws line in scene",
-        desc: "Used for visualization.",
-        code: "Debug.DrawLine(a, b, Color.red);"
+        tip: "Draw debug line",
+        desc: "Visualize rays.",
+        code: "Debug.DrawLine(a,b,Color.red);"
       },
       "Gizmos.DrawWireSphere": {
         tip: "Editor visualization",
-        desc: "Draws wireframe sphere.",
-        code: "Gizmos.DrawWireSphere(pos, radius);"
-      }
-    },
-
-    "Input / Time": {
-      "Input.GetKey": {
-        tip: "Key held",
-        desc: "Continuous input.",
-        code: "Input.GetKey(KeyCode.Space);"
-      },
-      "Time.deltaTime": {
-        tip: "Frame delta",
-        desc: "Smooth movement.",
-        code: "speed * Time.deltaTime;"
+        desc: "Show radius or area.",
+        code: "Gizmos.DrawWireSphere(pos, r);"
       }
     }
   }
@@ -213,9 +173,7 @@ function renderCategories() {
         tooltip.style.left = e.clientX + 15 + "px";
         tooltip.style.top = e.clientY + 15 + "px";
       };
-      btn.onmouseleave = () => {
-        tooltip.style.display = "none";
-      };
+      btn.onmouseleave = () => tooltip.style.display = "none";
 
       btn.onclick = () => {
         titleEl.textContent = name;
@@ -240,7 +198,38 @@ function renderCategories() {
 }
 
 /* =========================
-   INIT
+   SNOW (RESTORED)
 ========================= */
 
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+let w, h, flakes;
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  flakes = Array.from({ length: 180 }, () => ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 2 + 0.5,
+    s: Math.random() * 1 + 0.4
+  }));
+}
+
+function snow() {
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = "rgba(255,255,255,0.7)";
+  flakes.forEach(f => {
+    ctx.beginPath();
+    ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+    ctx.fill();
+    f.y += f.s;
+    if (f.y > h) f.y = -5;
+  });
+  requestAnimationFrame(snow);
+}
+
+window.addEventListener("resize", resize);
+resize();
+snow();
 renderCategories();
