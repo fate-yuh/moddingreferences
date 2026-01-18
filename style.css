@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1b1b2f, #0b0b12);
+  color: #e6e6e6;
+  overflow: hidden;
+}
+
+canvas#snow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  padding: 20px;
+  backdrop-filter: blur(14px);
+  background: rgba(20, 20, 35, 0.55);
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar h1 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.lang-select button {
+  width: 48%;
+  margin-bottom: 10px;
+}
+
+/* Glass buttons */
+button {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+/* Category / method buttons */
+.method {
+  margin: 6px 0;
+  position: relative;
+}
+
+/* Tooltip */
+.method:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 105%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.85);
+  padding: 8px;
+  border-radius: 8px;
+  width: 220px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+pre {
+  background: rgba(0,0,0,0.7);
+  padding: 20px;
+  border-radius: 14px;
+  overflow-x: auto;
+  margin-top: 20px;
+}
