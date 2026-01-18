@@ -10,13 +10,21 @@
 <canvas id="snow"></canvas>
 
 <div class="app">
+
   <aside class="sidebar">
     <h1>Modding Reference</h1>
 
     <div class="lang-select">
-      <button onclick="setLang('C#')">C#</button>
       <button onclick="setLang('C++')">C++</button>
+      <button onclick="setLang('C#')">C#</button>
     </div>
+
+    <input
+      id="search"
+      type="text"
+      placeholder="Search methods..."
+      oninput="renderCategories()"
+    >
 
     <div id="categories"></div>
   </aside>
@@ -24,9 +32,9 @@
   <main class="content">
     <h2 id="title">Select a method</h2>
     <p id="desc"></p>
-
     <pre><code id="code"></code></pre>
   </main>
+
 </div>
 
 <script src="app.js"></script>
