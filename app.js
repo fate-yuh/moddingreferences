@@ -6,12 +6,6 @@ const tooltip = document.getElementById("tooltip");
 
 const DATA = {
   "C++": {
-     "Basics": {
-        "bool/boolean": {
-           tip: "true or false, sometimes in binary (0 1) mostly strings (true or false)",
-           desc: "easiest part of modding, true or false.",
-           code: "m_IsActive = true"
-        },
     "Domains & Threads": {
       "il2cpp_domain_get": {
         tip: "Get active IL2CPP domain",
@@ -239,4 +233,5 @@ window.addEventListener("resize", resize);
 resize();
 snow();
 renderCategories();
+
 
