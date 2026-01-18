@@ -16,6 +16,20 @@ body {
   z-index: 0;
 }
 
+#tooltip {
+  position: fixed;
+  background: rgba(0,0,0,0.9);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  max-width: 300px;
+  display: none;
+  pointer-events: none;
+  z-index: 9999;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
 .app {
   display: flex;
   height: 100vh;
@@ -24,7 +38,7 @@ body {
 }
 
 .sidebar {
-  width: 320px;
+  width: 340px;
   padding: 20px;
   backdrop-filter: blur(16px);
   background: rgba(18,18,32,0.6);
@@ -43,6 +57,7 @@ h1 {
 }
 
 button {
+  width: 100%;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 12px;
@@ -66,44 +81,23 @@ button:hover {
   color: white;
 }
 
-/* Category button */
 .category-btn {
-  width: 100%;
   margin-top: 10px;
   font-weight: bold;
   text-align: left;
 }
 
-/* Method list */
 .method-list {
-  margin-top: 6px;
   margin-left: 8px;
+  margin-top: 6px;
+  display: none;
 }
 
-/* Method button */
 .method {
-  width: 100%;
   margin-bottom: 6px;
   text-align: left;
-  position: relative;
 }
 
-/* Tooltip */
-.method:hover::after {
-  content: attr(data-tip);
-  position: absolute;
-  left: 102%;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.85);
-  padding: 8px;
-  border-radius: 10px;
-  width: 220px;
-  font-size: 12px;
-  pointer-events: none;
-}
-
-/* Content */
 .content {
   flex: 1;
   padding: 30px;
@@ -115,4 +109,5 @@ pre {
   padding: 20px;
   border-radius: 14px;
   margin-top: 20px;
+  overflow-x: auto;
 }
