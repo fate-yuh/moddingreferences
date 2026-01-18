@@ -1,16 +1,16 @@
 * {
   box-sizing: border-box;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #1b1b2f, #0b0b12);
-  color: #e6e6e6;
+  background: radial-gradient(circle at top, #1c2038, #090910);
+  color: #e8e8e8;
   overflow: hidden;
 }
 
-canvas#snow {
+#snow {
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -25,24 +25,31 @@ canvas#snow {
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
+  width: 300px;
   padding: 20px;
-  backdrop-filter: blur(14px);
-  background: rgba(20, 20, 35, 0.55);
+  backdrop-filter: blur(16px);
+  background: rgba(18, 18, 32, 0.6);
   border-right: 1px solid rgba(255,255,255,0.08);
+  overflow-y: auto;
 }
 
 .sidebar h1 {
   font-size: 20px;
-  margin-bottom: 15px;
-}
-
-.lang-select button {
-  width: 48%;
   margin-bottom: 10px;
 }
 
-/* Glass buttons */
+/* Search */
+#search {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 15px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+}
+
+/* Buttons */
 button {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
@@ -51,32 +58,48 @@ button {
   color: #fff;
   cursor: pointer;
   backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 button:hover {
   background: rgba(255,255,255,0.18);
 }
 
-/* Category / method buttons */
+.lang-select {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+h3 {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  color: #aeb4ff;
+}
+
+/* Method buttons */
 .method {
-  margin: 6px 0;
+  width: 100%;
+  margin-bottom: 6px;
   position: relative;
+  text-align: left;
 }
 
 /* Tooltip */
 .method:hover::after {
   content: attr(data-tip);
   position: absolute;
-  left: 105%;
+  left: 102%;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(0,0,0,0.85);
   padding: 8px;
-  border-radius: 8px;
-  width: 220px;
+  border-radius: 10px;
+  width: 230px;
   font-size: 12px;
   pointer-events: none;
+  color: #fff;
+  z-index: 10;
 }
 
 /* Content */
@@ -90,6 +113,6 @@ pre {
   background: rgba(0,0,0,0.7);
   padding: 20px;
   border-radius: 14px;
-  overflow-x: auto;
   margin-top: 20px;
+  overflow-x: auto;
 }
