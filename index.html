@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Unity / IL2CPP Modding Reference</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Modding Tutorial For Skids!</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <canvas id="snow"></canvas>
+<div id="tooltip"></div>
 
 <div class="app">
-
   <aside class="sidebar">
-    <h1>Modding Reference</h1>
+    <h1>Modding Tut</h1>
 
     <div class="lang-select">
       <button onclick="setLang('C++')">C++</button>
@@ -21,10 +21,9 @@
 
     <input
       id="search"
-      type="text"
-      placeholder="Search methods..."
+      placeholder="Search methods or concepts..."
       oninput="renderCategories()"
-    >
+    />
 
     <div id="categories"></div>
   </aside>
@@ -34,7 +33,6 @@
     <p id="desc"></p>
     <pre><code id="code"></code></pre>
   </main>
-
 </div>
 
 <script src="app.js"></script>
